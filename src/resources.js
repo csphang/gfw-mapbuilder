@@ -177,7 +177,7 @@ export default {
         id: 'TREE_COVER_GAIN',
         type: 'gain', //'image',
         // url: 'http://gis-treecover.wri.org/arcgis/rest/services/ForestGain_2000_2012/ImageServer',
-        url: 'http://earthengine.google.org/static/hansen_2013/gain_alpha/{z}/{x}/{y}.png',
+        url: 'https://earthengine.google.org/static/hansen_2013/gain_alpha/{z}/{x}/{y}.png',
         technicalName: 'tree_cover_gain',
         legendLayer: 1,
         label: {
@@ -200,7 +200,7 @@ export default {
         order: 3,
         id: 'IMAZON_SAD',
         type: 'dynamic',
-        url: 'http://gis-gfw.wri.org/arcgis/rest/services/forest_change/MapServer',
+        url: 'https://gfw-staging.wri.org/arcgis/rest/services/forest_change/MapServer',
         technicalName: 'imazon_sad',
         layerIds: [2],
         label: {
@@ -223,7 +223,7 @@ export default {
         order: 4,
         id: 'GLAD_ALERTS',
         type: 'glad',
-        url: 'http://wri-tiles.s3.amazonaws.com/glad_prod/tiles/{z}/{x}/{y}.png',
+        url: 'https://wri-tiles.s3.amazonaws.com/glad_prod/tiles/{z}/{x}/{y}.png',
         technicalName: 'umd_landsat_alerts',
         legendLayer: 7,
         minDateValue: 15000,
@@ -249,7 +249,7 @@ export default {
         order: 5,
         id: 'TERRA_I_ALERTS',
         type: 'terra',
-        url: 'http://wri-tiles.s3.amazonaws.com/terrai_prod/tiles/{z}/{x}/{y}.png',
+        url: 'https://wri-tiles.s3.amazonaws.com/terrai_prod/tiles/{z}/{x}/{y}.png',
         technicalName: 'terra_i_alerts',
         legendLayer: 13,
         maxZoom: 10,
@@ -278,9 +278,9 @@ export default {
         order: 6,
         id: 'ACTIVE_FIRES',
         type: 'dynamic',
-        url: 'http://gis-potico.wri.org/arcgis/rest/services/Fires/Global_Fires/MapServer',
+        url: 'https://gfw-staging.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer',
         technicalName: 'noaa18_fires',
-        layerIds: [0, 1, 2, 3],
+        layerIds: [9],
         label: {
           en: 'Active fires',
           fr: 'Feux actifs',
@@ -344,7 +344,7 @@ export default {
         order: 2,
         id: 'IFL',
         type: 'dynamic',
-        url: 'http://gis-gfw.wri.org/arcgis/rest/services/forest_cover/MapServer',
+        url: 'https://gfw-staging.wri.org/arcgis/rest/services/forest_cover/MapServer',
         technicalName: 'intact_forest_landscapes_change',
         layerIds: [0],
         label: {
@@ -359,7 +359,7 @@ export default {
         order: 3,
         id: 'AG_BIOMASS',
         type: 'image',
-        url: 'http://gis-gfw.wri.org/arcgis/rest/services/image_services/whrc_carbon_tcd/ImageServer',
+        url: 'https://gfw-staging.wri.org/arcgis/rest/services/image_services/whrc_carbon_tcd/ImageServer',
         technicalName: 'aboveground_biomass',
         legendLayer: 8,
         label: {
@@ -374,7 +374,7 @@ export default {
         order: 4,
         id: 'LAND_COVER',
         type: 'webtiled',
-        url: 'http://wri-tiles.s3.amazonaws.com/global-landcover/{level}/{col}/{row}.png',
+        url: 'https://wri-tiles.s3.amazonaws.com/global-landcover/{level}/{col}/{row}.png',
         technicalName: 'global_landcover',
         legendLayer: 15,
         rasterId: '$568',
@@ -423,33 +423,33 @@ export default {
           id: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
           zh: '(2000年, 30米 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))'
         }
-      }, {
-          order: 6,
-          id: 'WFS_COVER',
-          type: 'wfs',
-          url: 'http://139.255.83.75:3000/geoserver/smallholder_database/wfs',
-          technicalName: 'wfs_cover',
-          colormap: [[1, 0, 179, 0]],
-          inputRange: [30, 101],
-          outputRange: [1],
-          opacity: 0.8,
-          legendLayer: 2,
-          label: {
-            en: 'WFS',
-            fr: 'Densité du couvert arboré',
-            es: 'Densidad de follaje',
-            pt: 'Tree cover density',
-            id: 'Tree cover density',
-            zh: '森林覆盖密度'
-          },
-          sublabel: {
-            en: 'WFS',
-            fr: '(année 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-            es: '(2000, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-            pt: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-            id: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
-            zh: '(2000年, 30米 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))'
-          }
+      // }, {
+      //     order: 6,
+      //     id: 'WFS_COVER',
+      //     type: 'wfs',
+      //     url: 'http://139.255.83.75:3000/geoserver/smallholder_database/wfs',
+      //     technicalName: 'wfs_cover',
+      //     colormap: [[1, 0, 179, 0]],
+      //     inputRange: [30, 101],
+      //     outputRange: [1],
+      //     opacity: 0.8,
+      //     legendLayer: 2,
+      //     label: {
+      //       en: 'WFS',
+      //       fr: 'Densité du couvert arboré',
+      //       es: 'Densidad de follaje',
+      //       pt: 'Tree cover density',
+      //       id: 'Tree cover density',
+      //       zh: '森林覆盖密度'
+      //     },
+      //     sublabel: {
+      //       en: 'WFS',
+      //       fr: '(année 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+      //       es: '(2000, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+      //       pt: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+      //       id: '(year 2000, 30m global, Hansen/UMD/Google/USGS/NASA)',
+      //       zh: '(2000年, 30米 全球覆盖, 汉森/马里兰大学/谷歌/美国地质测量局(USGS)/美国宇航局(NASA))'
+      //     }
       }]
     },
     GROUP_BASEMAP: {

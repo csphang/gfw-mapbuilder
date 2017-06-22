@@ -105,7 +105,7 @@ This is currently only supported for dynamic layers and feature layers.  A popup
 order: 6,
 id: 'ACTIVE_FIRES',
 type: 'dynamic',
-url: 'http://gis-potico.wri.org/arcgis/rest/services/Fires/Global_Fires/MapServer',
+url: 'https://gfw-staging.wri.org/arcgis/rest/services/Fires/FIRMS_Global/MapServer',
 technicalName: 'noaa18_fires',
 layerIds: [0, 1, 2, 3],
 label: {
