@@ -5,6 +5,7 @@ import Header from 'components/Header';
 import AppStore from 'stores/AppStore';
 import template from 'utils/template';
 import Map from 'components/Map';
+import {getUrlParams} from 'utils/params';
 import React, {
   Component,
   PropTypes
@@ -34,15 +35,24 @@ export default class App extends Component {
     template.getAppInfo().then(settings => {
       if (this.props.constructorParams && this.props.constructorParams.config) {
         this.updateBasemapImages(this.props.constructorParams.config);
+
         lang.mixin(settings, this.props.constructorParams.config);
+
+        const appid = getUrlParams(location.href).appid;
+
+        if (appid) {
+          template.getAppInfo(appid).then(newSettings => {
+            this.setSettings(newSettings);
+          });
+        } else {
+          template.getAppInfo().then(newSettings => {
+            this.setSettings(newSettings);
+          });
+        }
+      } else {
+        this.setSettings(settings);
       }
 
-      appActions.applySettings(settings);
-      this.updateTitle(settings);
-      createTracker('UA-62288390-15');
-      if (settings.analyticsCode) {
-        createTracker(settings.analyticsCode);
-      }
     });
   }
 
@@ -53,6 +63,15 @@ export default class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.state.language !== prevState.language) {
       this.updateTitle(this.state.settings);
+    }
+  }
+
+  setSettings = (settings) => {
+    appActions.applySettings(settings);
+    this.updateTitle(settings);
+    createTracker('UA-62288390-15');
+    if (settings.analyticsCode) {
+      createTracker(settings.analyticsCode);
     }
   }
 

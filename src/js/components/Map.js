@@ -84,16 +84,6 @@ export default class Map extends Component {
 
   componentDidMount() {
     MapStore.listen(this.storeDidUpdate);
-
-    // I only need the token and url for config items, so language does not matter
-    const USER_FEATURES_CONFIG = utils.getObject(resources.layerPanel.extraLayers, 'id', layerKeys.USER_FEATURES);
-    // Make sure all requests that use tokens have them
-    esriRequest.setRequestPreCallback((ioArgs) => {
-      if (ioArgs.url.search(USER_FEATURES_CONFIG.url) > -1) {
-        ioArgs.content.token = resources.userFeatureToken[location.hostname];
-      }
-      return ioArgs;
-    });
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -285,7 +275,7 @@ export default class Map extends Component {
 
     //- Set up the group labels and group layers
     settings.layerPanel.GROUP_WEBMAP.layers = layers;
-    settings.layerPanel.GROUP_WEBMAP.label[language] = settings.labels[language].webmapMenuName;
+    settings.layerPanel.GROUP_WEBMAP.label[language] = settings.labels[language] ? settings.labels[language].webmapMenuName : '';
 
     if (saveLayersInOtherLang) {
       settings.layerPanel.GROUP_WEBMAP.label[settings.alternativeLanguage] = settings.labels[settings.alternativeLanguage].webmapMenuName;
@@ -303,8 +293,11 @@ export default class Map extends Component {
       layerModalVisible,
       modalLayerInfo,
       webmapInfo,
-      map
+      map,
+      activeLayers
     } = this.state;
+
+    const { settings } = this.context;
 
     const timeSlider = webmapInfo && webmapInfo.widgets && webmapInfo.widgets.timeSlider;
     const timeWidgets = [];
@@ -329,8 +322,8 @@ export default class Map extends Component {
           <Controls {...this.state} timeEnabled={!!timeSlider} />
           <TabButtons {...this.state} />
           <TabView {...this.state} />
-          <Legend {...this.state} />
-          <FooterInfos map={map} />
+          {map.loaded ? <Legend tableOfContentsVisible={this.state.tableOfContentsVisible} activeLayers={activeLayers} legendOpen={this.state.legendOpen} /> : null}
+          <FooterInfos hidden={settings.hideFooter} map={map} />
           {timeWidgets}
           <svg className={`map__viewfinder${map.loaded ? '' : ' hidden'}`}>
             <use xlinkHref='#shape-crosshairs' />
