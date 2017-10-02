@@ -127,7 +127,7 @@ export default class LayerPanel extends Component {
         <LayerGroup
           key={group.key}
           groupKey={group.key}
-          label={group.label[language]}
+          label={group.label ? group.label[language] : group.title ? group.title : group.key}
           {...this.props}>
           {layers}
         </LayerGroup>
@@ -140,16 +140,6 @@ export default class LayerPanel extends Component {
       activeLayers,
       dynamicLayers,
       iconLoading,
-      gladStartDate,
-      gladEndDate,
-      terraIStartDate,
-      terraIEndDate,
-      viirsFiresSelectIndex,
-      viirsStartDate,
-      viirsEndDate,
-      modisFiresSelectIndex,
-      modisStartDate,
-      modisEndDate,
       ...props} = this.props;
     let childComponent;
 

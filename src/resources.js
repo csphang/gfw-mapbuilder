@@ -429,6 +429,10 @@ export default {
           visible: true
         }
       ]
-    }
+    },
+    ...customGroups.map(group => {
+      group.isCustomGroup = true;
+      return group;
+    })
   ]
 };

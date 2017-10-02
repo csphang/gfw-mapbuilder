@@ -110,7 +110,7 @@ export default class LayerCheckbox extends Component {
     const checked = this.props.checked ? 'active' : '';
     const disabled = layer.disabled ? 'disabled' : '';
     const hidden = LayersHelper.isLayerVisible(map, layer) ? '' : 'hidden';
-    const label = typeof layer.label === 'string' ? layer.label : layer.label[language];
+    const label = layer.label ? typeof layer.label === 'string' ? layer.label : layer.label[language] : '';
     const {sublabel} = layer;
 
     return (

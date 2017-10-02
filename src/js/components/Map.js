@@ -131,6 +131,43 @@ export default class Map extends Component {
     arcgisUtils.createMap(webmap, this.refs.map, { mapOptions: options, usePopupManager: true }).then(response => {
       // Add operational layers from the webmap to the array of layers from the config file.
       const {itemData} = response.itemInfo;
+
+      settings.layerPanel.forEach(group => {
+        if (group.isCustomGroup) {
+          group.groupId = group.title;
+          group.key = group.title;
+          group.label = { en: group.title };
+          group.layers = group.layers.map(layerTitle => {
+
+            const operationalLayer = itemData.operationalLayers.filter(l => l.title === layerTitle)[0];
+            let type;
+
+            switch (operationalLayer.layerType) {
+              case 'ArcGISTiledMapServiceLayer':
+                type = 'tiled';
+                break;
+              case 'ArcGISImageServiceLayer':
+                type = 'image';
+                break;
+              case 'ArcGISDynamicMapServiceLayer':
+                type = 'dynamic';
+                break;
+              case 'ArcGISFeatureLayer':
+                type = 'feature';
+                break;
+            }
+
+            return {
+              type,
+              url: operationalLayer.url,
+              visible: operationalLayer.visibility,
+              order: operationalLayer.order,
+              id: operationalLayer.id,
+              label: operationalLayer.title
+             };
+          });
+        }
+      });
       this.addLayersToLayerPanel(settings, itemData.operationalLayers);
       // Store a map reference and clear out any default graphics
       response.map.graphics.clear();
@@ -306,8 +343,7 @@ export default class Map extends Component {
   addLayersToLayerPanel = (settings, operationalLayers) => {
     const {language} = this.context, layers = [];
     // Remove any already existing webmap layers
-    // settings.layerPanel.GROUP_WEBMAP.layers = [];
-    // console.log(settings.layerPanel.GROUP_WEBMAP.layers);
+
     // settings.layerPanel.GROUP_INDIGENOUS_INDICATORS = {
     //   order: 3,
     //   label: {
@@ -457,7 +493,7 @@ export default class Map extends Component {
         //   || layer.id === 'land_use_1483'
         //   || layer.id === 'land_use_5422'
         //   || layer.id === 'infrastructure_9418') {
-        //     groupPressures.push(layerInfo);
+        //     console.log(layer);
         //   }
 
         // if (layer.id === 'comm_comm_CustomaryTenure_6877'
