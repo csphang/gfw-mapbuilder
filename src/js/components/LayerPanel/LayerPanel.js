@@ -45,14 +45,14 @@ export default class LayerPanel extends Component {
 
   renderLayerGroups = (groups, language) => {
     //- Make an array, filter it, then sort by order
-    const orderedGroups = Object.keys(groups).filter((key) => {
+    const orderedGroups = groups.filter(group => {
       //- extraLayers show on the map but not here, if no layers are configured
       //- don't add the group
-      return key !== 'extraLayers' && groups[key].layers.length;
-    }).map(key => {
+      return group.groupId !== 'extraLayers' && group.layers && group.layers.length;
+    }).map(group => {
       //- Add a key to it for React
-      groups[key].key = key;
-      return groups[key];
+      group.key = group.groupId;
+      return group;
     }).sort((a, b) => {
       //- Sort on configured order
       return a.order - b.order;
@@ -64,61 +64,64 @@ export default class LayerPanel extends Component {
 
       let layers = [];
 
-      if (group.key === 'GROUP_LAND_MAPS') {
+      // if (group.key === 'GROUP_LAND_MAPS') {
 
-        group.indigenous = [];
-        group.community = [];
+      //   group.indigenous = [];
+      //   group.community = [];
 
-        group.layers.forEach(layer => {
+      //   group.layers.forEach(layer => {
 
-          if (layer.id === 'comm_comm_NotDocumented_9336'
-            || layer.id === 'comm_comm_Documented_4717') { // if this is the community group and IS acknowledged by govt
+      //     if (layer.id === 'comm_comm_NotDocumented_9336'
+      //       || layer.id === 'comm_comm_Documented_4717') { // if this is the community group and IS acknowledged by govt
 
-            layer.acknowledgedByGovt = true;
-            layer.indigenousOrCommunity = 'community';
-            layer.panelOrder = layer.id === 'comm_comm_Documented_4717' ? 0 : 1; // Order the 'Documented' layer ahead of the 'Not Documented' layer
+      //       layer.acknowledgedByGovt = true;
+      //       layer.indigenousOrCommunity = 'community';
+      //       layer.panelOrder = layer.id === 'comm_comm_Documented_4717' ? 0 : 1; // Order the 'Documented' layer ahead of the 'Not Documented' layer
 
-          } else if (layer.id === 'comm_comm_CustomaryTenure_6877'
-            || layer.id === 'comm_comm_FormalLandClaim_5585') { // if this is the community group and NOT acknowledged by govt
+      //     } else if (layer.id === 'comm_comm_CustomaryTenure_6877'
+      //       || layer.id === 'comm_comm_FormalLandClaim_5585') { // if this is the community group and NOT acknowledged by govt
 
-            layer.acknowledgedByGovt = false;
-            layer.indigenousOrCommunity = 'community';
-            layer.panelOrder = layer.id === 'comm_comm_FormalLandClaim_5585' ? 0 : 1; // Order the 'Formal' layer ahead of the 'Customary' layer
+      //       layer.acknowledgedByGovt = false;
+      //       layer.indigenousOrCommunity = 'community';
+      //       layer.panelOrder = layer.id === 'comm_comm_FormalLandClaim_5585' ? 0 : 1; // Order the 'Formal' layer ahead of the 'Customary' layer
 
-          } else if (layer.id === 'comm_ind_CustomaryTenure_8127'
-            || layer.id === 'comm_ind_FormalLandClaim_2392') { // if this is the indigenous group and NOT acknowledged by govt
+      //     } else if (layer.id === 'comm_ind_CustomaryTenure_8127'
+      //       || layer.id === 'comm_ind_FormalLandClaim_2392') { // if this is the indigenous group and NOT acknowledged by govt
 
-            layer.acknowledgedByGovt = false;
-            layer.indigenousOrCommunity = 'indigenous';
-            layer.panelOrder = layer.id === 'comm_ind_FormalLandClaim_2392' ? 0 : 1; // Order the 'Formal' layer ahead of the 'Customary' layer
+      //       layer.acknowledgedByGovt = false;
+      //       layer.indigenousOrCommunity = 'indigenous';
+      //       layer.panelOrder = layer.id === 'comm_ind_FormalLandClaim_2392' ? 0 : 1; // Order the 'Formal' layer ahead of the 'Customary' layer
 
-          } else if (layer.id === 'comm_ind_NotDocumented_2683'
-            || layer.id === 'comm_ind_Documented_8219') { // if this is the indigenous group and IS acknowledged by govt
+      //     } else if (layer.id === 'comm_ind_NotDocumented_2683'
+      //       || layer.id === 'comm_ind_Documented_8219') { // if this is the indigenous group and IS acknowledged by govt
 
-            layer.acknowledgedByGovt = true;
-            layer.indigenousOrCommunity = 'indigenous';
-            layer.panelOrder = layer.id === 'comm_ind_Documented_8219' ? 0 : 1; // Order the 'Documented' layer ahead of the 'Not Documented' layer
+      //       layer.acknowledgedByGovt = true;
+      //       layer.indigenousOrCommunity = 'indigenous';
+      //       layer.panelOrder = layer.id === 'comm_ind_Documented_8219' ? 0 : 1; // Order the 'Documented' layer ahead of the 'Not Documented' layer
 
-          }
-        });
-      }
+      //     }
+      //   });
+      // }
 
       // IF group.key is one of the ones we need radio buttons for run a new function this.createRadios (or something)
       // and pass all of the layers to it. That way we can handle the radio selection in the component
 
-      if (group.key === LayerKeys.GROUP_INDIGENOUS_INDICATORS || group.key === LayerKeys.GROUP_COMMUNITY_INDICATORS) {
-        group.layers.sort((a, b) => a.subIndex - b.subIndex);
-        layers = this.createRadioGroup(group.layers);
-      } else if (group.key === 'GROUP_LAND_MAPS') {
-        layers = <NestedGroup layers={group.layers} activeLayers={this.props.activeLayers} />;
-      } else if (group.key === 'GROUP_INDIGENOUS_LANDS_HELD') {
-        group.layers.sort((a, b) => a.subIndex - b.subIndex);
-        layers = this.createRadioGroup(group.layers);
-      } else {
-        layers = group.key === LayerKeys.GROUP_BASEMAP ?
-        this.renderBasemaps(group.layers) :
-        group.layers.sort((a, b) => { return b.order - a.order; }).map(this.checkboxMap, this);
-      }
+      // if (group.key === LayerKeys.GROUP_INDIGENOUS_INDICATORS || group.key === LayerKeys.GROUP_COMMUNITY_INDICATORS) {
+      //   group.layers.sort((a, b) => a.subIndex - b.subIndex);
+      //   layers = this.createRadioGroup(group.layers);
+      // } else if (group.key === 'GROUP_LAND_MAPS') {
+      //   layers = <NestedGroup layers={group.layers} activeLayers={this.props.activeLayers} />;
+      // } else if (group.key === 'GROUP_INDIGENOUS_LANDS_HELD') {
+      //   group.layers.sort((a, b) => a.subIndex - b.subIndex);
+      //   layers = this.createRadioGroup(group.layers);
+      // } else {
+        // layers = group.key === LayerKeys.GROUP_BASEMAP ?
+        // this.renderBasemaps(group.layers) :
+        // group.layers.sort((a, b) => { return b.order - a.order; }).map(this.checkboxMap, this);
+      // }
+      layers = group.key === LayerKeys.GROUP_BASEMAP ?
+      this.renderBasemaps(group.layers) :
+      group.layers.sort((a, b) => { return b.order - a.order; }).map(this.checkboxMap, this);
 
       return (
         <LayerGroup
@@ -148,38 +151,9 @@ export default class LayerPanel extends Component {
       modisStartDate,
       modisEndDate,
       ...props} = this.props;
-    const {language} = this.context;
     let childComponent;
 
     switch (layer.id) {
-      case 'VIIRS_ACTIVE_FIRES':
-        childComponent = <FiresControls
-          loaded={props.loaded}
-          layer={layer}
-          language={language}
-          firesSelectIndex={viirsFiresSelectIndex}
-          selectChangeAction={layerActions.changeViirsFiresTimeline}
-          updateStartDate={layerActions.updateViirsStartDate}
-          updateEndDate={layerActions.updateViirsEndDate}
-          startDate={viirsStartDate}
-          endDate={viirsEndDate}
-          {...props}
-        />;
-        break;
-      case 'MODIS_ACTIVE_FIRES':
-        childComponent = <FiresControls
-          loaded={props.loaded}
-          layer={layer}
-          language={language}
-          firesSelectIndex={modisFiresSelectIndex}
-          selectChangeAction={layerActions.changeModisFiresTimeline}
-          updateStartDate={layerActions.updateModisStartDate}
-          updateEndDate={layerActions.updateModisEndDate}
-          startDate={modisStartDate}
-          endDate={modisEndDate}
-          {...props}
-        />;
-        break;
       case 'TREE_COVER_LOSS':
         childComponent = [
           <LossControls key='tcl_loss_control' layerId={layer.id} loaded={props.loaded} {...props} />,
@@ -189,21 +163,6 @@ export default class LayerPanel extends Component {
       case LayerKeys.TREE_COVER:
       case LayerKeys.AG_BIOMASS:
         childComponent = <DensityDisplay {...props} />;
-        break;
-      case LayerKeys.IMAZON_SAD:
-        childComponent = <SadControls
-            layer={layer}
-            startMonth={props.imazonStartMonth}
-            endMonth={props.imazonEndMonth}
-            startYear={props.imazonStartYear}
-            endYear={props.imazonEndYear}
-          />;
-        break;
-      case LayerKeys.GLAD_ALERTS:
-        childComponent = <GladControls layer={layer} startDate={gladStartDate} endDate={gladEndDate} />;
-        break;
-      case LayerKeys.TERRA_I_ALERTS:
-        childComponent = <TerraIControls layer={layer} startDate={terraIStartDate} endDate={terraIEndDate}/>;
         break;
       default:
         childComponent = null;
@@ -283,7 +242,7 @@ export default class LayerPanel extends Component {
   render() {
     const {settings, language} = this.context;
     //- Create the layerGroup components
-    const layerGroups = settings.layerPanel || {};
+    const layerGroups = settings.layerPanel || [];
     const groups = this.renderLayerGroups(layerGroups, language);
 
     return (

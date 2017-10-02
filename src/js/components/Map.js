@@ -112,10 +112,11 @@ export default class Map extends Component {
       prevState.basemap !== basemap ||
       prevState.map !== map
     ) {
+      const groupBasemap = settings.layerPanel.filter(g => g.groupId === 'GROUP_BASEMAP')[0];
       if (!prevState.basemap) {
-        basemapUtils.updateBasemap(map, 'osm', settings.layerPanel.GROUP_BASEMAP.layers);
+        basemapUtils.updateBasemap(map, 'osm', groupBasemap.layers);
       } else {
-        basemapUtils.updateBasemap(map, basemap, settings.layerPanel.GROUP_BASEMAP.layers);
+        basemapUtils.updateBasemap(map, basemap, groupBasemap.layers);
       }
     }
   }
@@ -306,69 +307,70 @@ export default class Map extends Component {
     const {language} = this.context, layers = [];
     // Remove any already existing webmap layers
     // settings.layerPanel.GROUP_WEBMAP.layers = [];
-    settings.layerPanel.GROUP_INDIGENOUS_INDICATORS = {
-      order: 3,
-      label: {
-        en: 'Indicators of the Legal Security of Indigenous Lands'
-      },
-      layers: [],
-      questionMap: { // key: layerInfo.subIndex, value: question string
-        0: 'The average score for the 10 indicators of the legal security of indigenous lands.',
-        1: 'Does the law recognize all rights that Indigenous peoples exercise over their lands as lawful forms of ownership?',
-        2: 'Does the law give indigenous land rights the same level of protection as the rights under other tenure systems?',
-        3: 'Does the law require the government to provide Indigenous peoples with a formal title and map to their land?',
-        4: 'Does the law recognize Indigenous peoples as a legal person for the purposes of land ownership?',
-        5: 'Does the law recognize Indigenous peoples as the legal authority over the land?',
-        6: 'Do the law and formal title recognize that indigenous land rights may be held in perpetuity?',
-        7: 'Does the law require the consent of Indigenous peoples before government or an outsider may acquire their land?',
-        8: 'Does the law explicitly recognize that indigenous land includes the rights to all trees on the land?',
-        9: 'Does the law explicitly recognize that indigenous land includes the rights to local water sources on the land?',
-        10: 'Does the law uphold indigenous land rights in the ownership and governance of national parks and other protected areas?',
-        11: 'The average score for the 10 indicators of the legal security of community lands.',
-        12: 'Does the law recognize all rights that communities exercise over their lands as lawful forms of ownership?',
-        13: 'Does the law give community land rights the same level of protection as the rights under other tenure systems?',
-        14: 'Does the law require the government to provide communities with a formal title and map to their land?',
-        15: 'Does the law recognize the community as a legal person for the purposes of land ownership?',
-        16: 'Does the law recognize the community as the legal authority over the land?',
-        17: 'Do the law and formal title recognize that community land rights may be held in perpetuity?',
-        18: 'Does the law require the consent of communities before government or an outsider may acquire their land?',
-        19: 'Does the law explicitly recognize that community land includes the rights to all trees on the land?',
-        20: 'Does the law explicitly recognize that community land includes the rights to local water sources on the land?',
-        21: 'Does the law uphold community land rights in the ownership and governance of national parks and other protected areas?'
-      }
-    };
+    // console.log(settings.layerPanel.GROUP_WEBMAP.layers);
+    // settings.layerPanel.GROUP_INDIGENOUS_INDICATORS = {
+    //   order: 3,
+    //   label: {
+    //     en: 'Indicators of the Legal Security of Indigenous Lands'
+    //   },
+    //   layers: [],
+    //   questionMap: { // key: layerInfo.subIndex, value: question string
+    //     0: 'The average score for the 10 indicators of the legal security of indigenous lands.',
+    //     1: 'Does the law recognize all rights that Indigenous peoples exercise over their lands as lawful forms of ownership?',
+    //     2: 'Does the law give indigenous land rights the same level of protection as the rights under other tenure systems?',
+    //     3: 'Does the law require the government to provide Indigenous peoples with a formal title and map to their land?',
+    //     4: 'Does the law recognize Indigenous peoples as a legal person for the purposes of land ownership?',
+    //     5: 'Does the law recognize Indigenous peoples as the legal authority over the land?',
+    //     6: 'Do the law and formal title recognize that indigenous land rights may be held in perpetuity?',
+    //     7: 'Does the law require the consent of Indigenous peoples before government or an outsider may acquire their land?',
+    //     8: 'Does the law explicitly recognize that indigenous land includes the rights to all trees on the land?',
+    //     9: 'Does the law explicitly recognize that indigenous land includes the rights to local water sources on the land?',
+    //     10: 'Does the law uphold indigenous land rights in the ownership and governance of national parks and other protected areas?',
+    //     11: 'The average score for the 10 indicators of the legal security of community lands.',
+    //     12: 'Does the law recognize all rights that communities exercise over their lands as lawful forms of ownership?',
+    //     13: 'Does the law give community land rights the same level of protection as the rights under other tenure systems?',
+    //     14: 'Does the law require the government to provide communities with a formal title and map to their land?',
+    //     15: 'Does the law recognize the community as a legal person for the purposes of land ownership?',
+    //     16: 'Does the law recognize the community as the legal authority over the land?',
+    //     17: 'Do the law and formal title recognize that community land rights may be held in perpetuity?',
+    //     18: 'Does the law require the consent of communities before government or an outsider may acquire their land?',
+    //     19: 'Does the law explicitly recognize that community land includes the rights to all trees on the land?',
+    //     20: 'Does the law explicitly recognize that community land includes the rights to local water sources on the land?',
+    //     21: 'Does the law uphold community land rights in the ownership and governance of national parks and other protected areas?'
+    //   }
+    // };
 
-    settings.layerPanel.GROUP_COMMUNITY_INDICATORS = {
-      order: 4,
-      label: {
-        en: 'Indicators of the Legal Security of Community Lands'
-      },
-      layers: []
-    };
+    // settings.layerPanel.GROUP_COMMUNITY_INDICATORS = {
+    //   order: 4,
+    //   label: {
+    //     en: 'Indicators of the Legal Security of Community Lands'
+    //   },
+    //   layers: []
+    // };
 
-    settings.layerPanel.GROUP_INDIGENOUS_LANDS_HELD = {
-      order: 2,
-      label: {
-        en: 'Percent of Country Held by Indigenous Peoples and Communities'
-      },
-      layers: []
-    };
+    // settings.layerPanel.GROUP_INDIGENOUS_LANDS_HELD = {
+    //   order: 2,
+    //   label: {
+    //     en: 'Percent of Country Held by Indigenous Peoples and Communities'
+    //   },
+    //   layers: []
+    // };
 
-    settings.layerPanel.GROUP_LAND_MAPS = {
-      order: 1,
-      label: {
-        en: 'Indigenous & Community Land Maps'
-      },
-      layers: []
-    };
+    // settings.layerPanel.GROUP_LAND_MAPS = {
+    //   order: 1,
+    //   label: {
+    //     en: 'Indigenous & Community Land Maps'
+    //   },
+    //   layers: []
+    // };
 
-    settings.layerPanel.GROUP_PRESSURES = {
-      order: 6,
-      label: {
-        en: 'Pressures'
-      },
-      layers: []
-    };
+    // settings.layerPanel.GROUP_PRESSURES = {
+    //   order: 6,
+    //   label: {
+    //     en: 'Pressures'
+    //   },
+    //   layers: []
+    // };
     // If an additional language is configured but no additional webmap is, we need to push the layer config into both
     // languages so the original webmap works in both views
     const saveLayersInOtherLang = (
@@ -384,11 +386,11 @@ export default class Map extends Component {
     * they show up in the correct location, which is why they have different logic for adding them to
     * the list than any other layers, push them in an array, then unshift in reverse order
     */
-    const groupIndigenousIndicators = [];
-    const groupCommunityIndicators = [];
-    const groupIndigenousLandsHeld = [];
-    const groupLandMaps = [];
-    const groupPressures = [];
+    // const groupIndigenousIndicators = [];
+    // const groupCommunityIndicators = [];
+    // const groupIndigenousLandsHeld = [];
+    // const groupLandMaps = [];
+    // const groupPressures = [];
     operationalLayers.forEach((layer) => {
       if (layer.layerType === 'ArcGISMapServiceLayer' && layer.resourceInfo.layers) {
         const dynamicLayers = [];
@@ -407,15 +409,15 @@ export default class Map extends Component {
             visible: visible,
             esriLayer: layer.layerObject
           };
-          if (layer.id === 'indicators_legal_security_8140' && sublayer.id < 11) {
-            layerInfo.sublabelQuestion = settings.layerPanel.GROUP_INDIGENOUS_INDICATORS.questionMap[sublayer.id];
-            groupIndigenousIndicators.push(layerInfo);
-          } else if (layer.id === 'indicators_legal_security_8140' && sublayer.id >= 11) {
-            layerInfo.sublabelQuestion = settings.layerPanel.GROUP_INDIGENOUS_INDICATORS.questionMap[sublayer.id];
-            groupCommunityIndicators.push(layerInfo);
-          } else if (layer.id === 'percent_IP_community_lands_1264') {
-            groupIndigenousLandsHeld.push(layerInfo);
-          }
+          // if (layer.id === 'indicators_legal_security_8140' && sublayer.id < 11) {
+          //   layerInfo.sublabelQuestion = settings.layerPanel.GROUP_INDIGENOUS_INDICATORS.questionMap[sublayer.id];
+          //   groupIndigenousIndicators.push(layerInfo);
+          // } else if (layer.id === 'indicators_legal_security_8140' && sublayer.id >= 11) {
+          //   layerInfo.sublabelQuestion = settings.layerPanel.GROUP_INDIGENOUS_INDICATORS.questionMap[sublayer.id];
+          //   groupCommunityIndicators.push(layerInfo);
+          // } else if (layer.id === 'percent_IP_community_lands_1264') {
+          //   groupIndigenousLandsHeld.push(layerInfo);
+          // }
         });
         //   if (layer.esriLayer.url === 'http://gis.wri.org/server/rest/services/LandMark/indicators_legal_security/MapServer' && sublayer.id < 11) {
         //     indigenousLayers.push(layerInfo);
@@ -451,33 +453,33 @@ export default class Map extends Component {
           itemId: layer.itemId
         };
 
-        if (layer.id === 'mining_cached_8843'
-          || layer.id === 'land_use_1483'
-          || layer.id === 'land_use_5422'
-          || layer.id === 'infrastructure_9418') {
-            groupPressures.push(layerInfo);
-          }
+        // if (layer.id === 'mining_cached_8843'
+        //   || layer.id === 'land_use_1483'
+        //   || layer.id === 'land_use_5422'
+        //   || layer.id === 'infrastructure_9418') {
+        //     groupPressures.push(layerInfo);
+        //   }
 
-        if (layer.id === 'comm_comm_CustomaryTenure_6877'
-          || layer.id === 'comm_comm_NotDocumented_9336'
-          || layer.id === 'comm_comm_Documented_4717'
-          || layer.id === 'comm_comm_FormalLandClaim_5585'
-          || layer.id === 'comm_ind_CustomaryTenure_8127'
-          || layer.id === 'comm_ind_FormalLandClaim_2392'
-          || layer.id === 'comm_ind_NotDocumented_2683'
-          || layer.id === 'comm_ind_Documented_8219') {
-            groupLandMaps.push(layerInfo);
-          }
+        // if (layer.id === 'comm_comm_CustomaryTenure_6877'
+        //   || layer.id === 'comm_comm_NotDocumented_9336'
+        //   || layer.id === 'comm_comm_Documented_4717'
+        //   || layer.id === 'comm_comm_FormalLandClaim_5585'
+        //   || layer.id === 'comm_ind_CustomaryTenure_8127'
+        //   || layer.id === 'comm_ind_FormalLandClaim_2392'
+        //   || layer.id === 'comm_ind_NotDocumented_2683'
+        //   || layer.id === 'comm_ind_Documented_8219') {
+        //     groupLandMaps.push(layerInfo);
+        //   }
         layers.unshift(layerInfo);
       }
     });
 
     //- Set up the group labels and group layers
-    settings.layerPanel.GROUP_INDIGENOUS_INDICATORS.layers = groupIndigenousIndicators;
-    settings.layerPanel.GROUP_COMMUNITY_INDICATORS.layers = groupCommunityIndicators;
-    settings.layerPanel.GROUP_INDIGENOUS_LANDS_HELD.layers = groupIndigenousLandsHeld;
-    settings.layerPanel.GROUP_PRESSURES.layers = groupPressures;
-    settings.layerPanel.GROUP_LAND_MAPS.layers = groupLandMaps;
+    // settings.layerPanel.GROUP_INDIGENOUS_INDICATORS.layers = groupIndigenousIndicators;
+    // settings.layerPanel.GROUP_COMMUNITY_INDICATORS.layers = groupCommunityIndicators;
+    // settings.layerPanel.GROUP_INDIGENOUS_LANDS_HELD.layers = groupIndigenousLandsHeld;
+    // settings.layerPanel.GROUP_PRESSURES.layers = groupPressures;
+    // settings.layerPanel.GROUP_LAND_MAPS.layers = groupLandMaps;
     // settings.layerPanel.GROUP_WEBMAP.label[language] = settings.labels[language] ? settings.labels[language].webmapMenuName : '';
 
     // if (saveLayersInOtherLang) {

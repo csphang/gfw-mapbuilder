@@ -1,3 +1,5 @@
+import customGroups from './customGroups';
+
 export default {
 
   //- NOTE: New Forest Atlas 2.0 Options, These are the raw values coming from ArcGIS Online from
@@ -114,13 +116,15 @@ export default {
   * @property {boolean=} layers[].{ANY} - Any additional layer params that need to be passed through
   * @property {object=} popup - Popup configuration for the layer if it is available
   */
-  layerPanel: {
-    GROUP_WEBMAP: {
+  layerPanel: [
+    {
+      groupId: 'GROUP_WEBMAP',
       order: 100,
       label: {}, // Configurable via alternativeWebmapMenuName and webmapMenuName above
       layers: [] // Will get filled in with layers from the webmap
     },
-    GROUP_LCD: {
+    {
+      groupId: 'GROUP_LCD',
       order: 7,
       label: {
         en: 'Land Cover Change',
@@ -195,7 +199,8 @@ export default {
         }
       }]
     },
-    GROUP_LC: {
+    {
+      groupId: 'GROUP_LC',
       order: 5,
       label: {
         en: 'Assets',
@@ -345,7 +350,8 @@ export default {
         }
       }]
     },
-    GROUP_BASEMAP: {
+    {
+      groupId: 'GROUP_BASEMAP',
       order: 8,
       label: {
         en: 'Basemap',
@@ -356,7 +362,8 @@ export default {
         zh: 'Basemap',
         ka: 'საბაზო რუკა'
       },
-      layers: [{
+      layers: [
+        {
         id: 'landsat',
         thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/basemaps-sdd18a411a3-5bf18f445e58b8766f773184b7741c67.png',
         templateUrl: 'https://d2h71bpqsyf4vw.cloudfront.net/2016/${level}/${col}/${row}.png',
@@ -370,7 +377,8 @@ export default {
           zh: 'Landsat',
           ka: 'Landsat'
         }
-      }, {
+      },
+      {
         id: 'wri_mono',
         thumbnailUrl: './css/images/wri_mono.png',
         title: {
@@ -382,38 +390,45 @@ export default {
           zh: 'WRI Mono',
           ka: 'WRI Mono'
         }
-      }, {
-        id: 'wri_contextual',
-        thumbnailUrl: './css/images/wri_contextual.png',
-        title: {
-          en: 'WRI Contextual',
-          fr: 'WRI Contextual',
-          es: 'WRI Contextual',
-          pt: 'WRI Contextual',
-          id: 'WRI Contextual',
-          zh: 'WRI Contextual',
-          ka: 'WRI Contextual'
+        },
+        {
+          id: 'wri_contextual',
+          thumbnailUrl: './css/images/wri_contextual.png',
+          title: {
+            en: 'WRI Contextual',
+            fr: 'WRI Contextual',
+            es: 'WRI Contextual',
+            pt: 'WRI Contextual',
+            id: 'WRI Contextual',
+            zh: 'WRI Contextual',
+            ka: 'WRI Contextual'
+          }
         }
-      }]
+      ]
     },
-    extraLayers: [{
-      id: 'MASK',
-      type: 'dynamic',
-      order: 10000,
-      url: 'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
-      opacity: 0.35,
-      layerIds: [0]
-    }, {
-      id: 'LEGEND_LAYER',
-      type: 'dynamic',
-      url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
-      visible: false,
-      opacity: 0,
-      layerIds: []
-    }, {
-      id: 'USER_FEATURES',
-      type: 'graphic',
-      visible: true
-    }]
-  }
+    {
+      groupId: 'extraLayers',
+      layers: [
+        {
+          id: 'MASK',
+          type: 'dynamic',
+          order: 10000,
+          url: 'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
+          opacity: 0.35,
+          layerIds: [0]
+        }, {
+          id: 'LEGEND_LAYER',
+          type: 'dynamic',
+          url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
+          visible: false,
+          opacity: 0,
+          layerIds: []
+        }, {
+          id: 'USER_FEATURES',
+          type: 'graphic',
+          visible: true
+        }
+      ]
+    }
+  ]
 };

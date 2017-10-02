@@ -226,7 +226,8 @@ const formatResources = () => {
   //   });
   // });
 
-  resources.layerPanel.GROUP_BASEMAP.layers.forEach((basemap) => {
+  const groupBasemap = resources.layerPanel.filter(g => g.groupId === 'GROUP_BASEMAP')[0];
+  groupBasemap.layers.forEach((basemap) => {
     if (basemap.thumbnailUrl && basemap.thumbnailUrl.indexOf('.') === 0) {
       basemap.thumbnailUrl = base + basemap.thumbnailUrl;
     }

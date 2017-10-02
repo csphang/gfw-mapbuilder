@@ -90,7 +90,8 @@ class MapActions {
     }, []);
 
     //- Add the extra layers now that all the others have been sorted
-    layers = layers.concat(layerPanel.extraLayers);
+    const extraLayersGroup = layerPanel.filter(g => g.groupId === 'extraLayers')[0];
+    layers = layers.concat(extraLayersGroup.layers);
 
     //- make sure there's only one entry for each dynamic layer
     let uniqueLayers = [];
