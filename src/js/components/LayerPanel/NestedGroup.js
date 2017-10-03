@@ -49,7 +49,7 @@ export default class NestedGroup extends Component {
       const groupLayers = [];
 
       group.layers.forEach(id => {
-        groupLayers.push(layers.filter(layer => layer.id = id)[0]);
+        groupLayers.push(layers.filter(layer => layer.esriLayer.id = id)[0]);
       });
 
       return <NestedCheckbox key={idx} groupLabel={group.title} layers={groupLayers} activeLayers={activeLayers} checked={groupLayers.some(l => activeLayers.indexOf(l.id) > -1)} />;

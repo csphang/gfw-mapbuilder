@@ -8,7 +8,7 @@ export default
       'mining_cached_8843',
       'land_use_1483',
       'land_use_5422',
-      'Major dams'
+      'infrastructure_9418'
     ],
     layers: []
   },
