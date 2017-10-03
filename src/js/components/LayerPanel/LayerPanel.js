@@ -64,69 +64,22 @@ export default class LayerPanel extends Component {
 
       let layers = [];
 
-      // if (group.key === 'GROUP_LAND_MAPS') {
-
-      //   group.indigenous = [];
-      //   group.community = [];
-
-      //   group.layers.forEach(layer => {
-
-      //     if (layer.id === 'comm_comm_NotDocumented_9336'
-      //       || layer.id === 'comm_comm_Documented_4717') { // if this is the community group and IS acknowledged by govt
-
-      //       layer.acknowledgedByGovt = true;
-      //       layer.indigenousOrCommunity = 'community';
-      //       layer.panelOrder = layer.id === 'comm_comm_Documented_4717' ? 0 : 1; // Order the 'Documented' layer ahead of the 'Not Documented' layer
-
-      //     } else if (layer.id === 'comm_comm_CustomaryTenure_6877'
-      //       || layer.id === 'comm_comm_FormalLandClaim_5585') { // if this is the community group and NOT acknowledged by govt
-
-      //       layer.acknowledgedByGovt = false;
-      //       layer.indigenousOrCommunity = 'community';
-      //       layer.panelOrder = layer.id === 'comm_comm_FormalLandClaim_5585' ? 0 : 1; // Order the 'Formal' layer ahead of the 'Customary' layer
-
-      //     } else if (layer.id === 'comm_ind_CustomaryTenure_8127'
-      //       || layer.id === 'comm_ind_FormalLandClaim_2392') { // if this is the indigenous group and NOT acknowledged by govt
-
-      //       layer.acknowledgedByGovt = false;
-      //       layer.indigenousOrCommunity = 'indigenous';
-      //       layer.panelOrder = layer.id === 'comm_ind_FormalLandClaim_2392' ? 0 : 1; // Order the 'Formal' layer ahead of the 'Customary' layer
-
-      //     } else if (layer.id === 'comm_ind_NotDocumented_2683'
-      //       || layer.id === 'comm_ind_Documented_8219') { // if this is the indigenous group and IS acknowledged by govt
-
-      //       layer.acknowledgedByGovt = true;
-      //       layer.indigenousOrCommunity = 'indigenous';
-      //       layer.panelOrder = layer.id === 'comm_ind_Documented_8219' ? 0 : 1; // Order the 'Documented' layer ahead of the 'Not Documented' layer
-
-      //     }
-      //   });
-      // }
-
-      // IF group.key is one of the ones we need radio buttons for run a new function this.createRadios (or something)
-      // and pass all of the layers to it. That way we can handle the radio selection in the component
-
-      // if (group.key === LayerKeys.GROUP_INDIGENOUS_INDICATORS || group.key === LayerKeys.GROUP_COMMUNITY_INDICATORS) {
-      //   group.layers.sort((a, b) => a.subIndex - b.subIndex);
-      //   layers = this.createRadioGroup(group.layers);
-      // } else if (group.key === 'GROUP_LAND_MAPS') {
-      //   layers = <NestedGroup layers={group.layers} activeLayers={this.props.activeLayers} />;
-      // } else if (group.key === 'GROUP_INDIGENOUS_LANDS_HELD') {
-      //   group.layers.sort((a, b) => a.subIndex - b.subIndex);
-      //   layers = this.createRadioGroup(group.layers);
-      // } else {
-        // layers = group.key === LayerKeys.GROUP_BASEMAP ?
-        // this.renderBasemaps(group.layers) :
-        // group.layers.sort((a, b) => { return b.order - a.order; }).map(this.checkboxMap, this);
-      // }
-      layers = group.key === LayerKeys.GROUP_BASEMAP ?
-      this.renderBasemaps(group.layers) :
-      group.layers.sort((a, b) => { return b.order - a.order; }).map(this.checkboxMap, this);
+      if (group.isRadio === true) {
+        group.layers.sort((a, b) => a.subIndex - b.subIndex);
+        layers = this.createRadioGroup(group.layers);
+      } else if (group.isNested === true) {
+        console.log(group);
+        layers = <NestedGroup groups={group.nestedGroups} layers={group.layers} activeLayers={this.props.activeLayers} />;
+      } else {
+        layers = group.key === LayerKeys.GROUP_BASEMAP ?
+        this.renderBasemaps(group.layers) :
+        group.layers.sort((a, b) => { return b.order - a.order; }).map(this.checkboxMap, this);
+      }
 
       return (
         <LayerGroup
-          key={group.key}
-          groupKey={group.key}
+          key={group.key || group.title}
+          groupKey={group.key || group.title}
           label={group.label ? group.label[language] : group.title ? group.title : group.key}
           {...this.props}>
           {layers}

@@ -132,42 +132,6 @@ export default class Map extends Component {
       // Add operational layers from the webmap to the array of layers from the config file.
       const {itemData} = response.itemInfo;
 
-      settings.layerPanel.forEach(group => {
-        if (group.isCustomGroup) {
-          group.groupId = group.title;
-          group.key = group.title;
-          group.label = { en: group.title };
-          group.layers = group.layers.map(layerTitle => {
-
-            const operationalLayer = itemData.operationalLayers.filter(l => l.title === layerTitle)[0];
-            let type;
-
-            switch (operationalLayer.layerType) {
-              case 'ArcGISTiledMapServiceLayer':
-                type = 'tiled';
-                break;
-              case 'ArcGISImageServiceLayer':
-                type = 'image';
-                break;
-              case 'ArcGISDynamicMapServiceLayer':
-                type = 'dynamic';
-                break;
-              case 'ArcGISFeatureLayer':
-                type = 'feature';
-                break;
-            }
-
-            return {
-              type,
-              url: operationalLayer.url,
-              visible: operationalLayer.visibility,
-              order: operationalLayer.order,
-              id: operationalLayer.id,
-              label: operationalLayer.title
-             };
-          });
-        }
-      });
       this.addLayersToLayerPanel(settings, itemData.operationalLayers);
       // Store a map reference and clear out any default graphics
       response.map.graphics.clear();
@@ -342,14 +306,8 @@ export default class Map extends Component {
 
   addLayersToLayerPanel = (settings, operationalLayers) => {
     const {language} = this.context, layers = [];
-    // Remove any already existing webmap layers
+    const { layerPanel } = settings;
 
-    // settings.layerPanel.GROUP_INDIGENOUS_INDICATORS = {
-    //   order: 3,
-    //   label: {
-    //     en: 'Indicators of the Legal Security of Indigenous Lands'
-    //   },
-    //   layers: [],
     //   questionMap: { // key: layerInfo.subIndex, value: question string
     //     0: 'The average score for the 10 indicators of the legal security of indigenous lands.',
     //     1: 'Does the law recognize all rights that Indigenous peoples exercise over their lands as lawful forms of ownership?',
@@ -375,38 +333,6 @@ export default class Map extends Component {
     //     21: 'Does the law uphold community land rights in the ownership and governance of national parks and other protected areas?'
     //   }
     // };
-
-    // settings.layerPanel.GROUP_COMMUNITY_INDICATORS = {
-    //   order: 4,
-    //   label: {
-    //     en: 'Indicators of the Legal Security of Community Lands'
-    //   },
-    //   layers: []
-    // };
-
-    // settings.layerPanel.GROUP_INDIGENOUS_LANDS_HELD = {
-    //   order: 2,
-    //   label: {
-    //     en: 'Percent of Country Held by Indigenous Peoples and Communities'
-    //   },
-    //   layers: []
-    // };
-
-    // settings.layerPanel.GROUP_LAND_MAPS = {
-    //   order: 1,
-    //   label: {
-    //     en: 'Indigenous & Community Land Maps'
-    //   },
-    //   layers: []
-    // };
-
-    // settings.layerPanel.GROUP_PRESSURES = {
-    //   order: 6,
-    //   label: {
-    //     en: 'Pressures'
-    //   },
-    //   layers: []
-    // };
     // If an additional language is configured but no additional webmap is, we need to push the layer config into both
     // languages so the original webmap works in both views
     const saveLayersInOtherLang = (
@@ -422,11 +348,7 @@ export default class Map extends Component {
     * they show up in the correct location, which is why they have different logic for adding them to
     * the list than any other layers, push them in an array, then unshift in reverse order
     */
-    // const groupIndigenousIndicators = [];
-    // const groupCommunityIndicators = [];
-    // const groupIndigenousLandsHeld = [];
-    // const groupLandMaps = [];
-    // const groupPressures = [];
+
     operationalLayers.forEach((layer) => {
       if (layer.layerType === 'ArcGISMapServiceLayer' && layer.resourceInfo.layers) {
         const dynamicLayers = [];
@@ -445,24 +367,22 @@ export default class Map extends Component {
             visible: visible,
             esriLayer: layer.layerObject
           };
-          // if (layer.id === 'indicators_legal_security_8140' && sublayer.id < 11) {
-          //   layerInfo.sublabelQuestion = settings.layerPanel.GROUP_INDIGENOUS_INDICATORS.questionMap[sublayer.id];
-          //   groupIndigenousIndicators.push(layerInfo);
-          // } else if (layer.id === 'indicators_legal_security_8140' && sublayer.id >= 11) {
-          //   layerInfo.sublabelQuestion = settings.layerPanel.GROUP_INDIGENOUS_INDICATORS.questionMap[sublayer.id];
-          //   groupCommunityIndicators.push(layerInfo);
-          // } else if (layer.id === 'percent_IP_community_lands_1264') {
-          //   groupIndigenousLandsHeld.push(layerInfo);
-          // }
+
+          dynamicLayers.push(layerInfo);
         });
-        //   if (layer.esriLayer.url === 'http://gis.wri.org/server/rest/services/LandMark/indicators_legal_security/MapServer' && sublayer.id < 11) {
-        //     indigenousLayers.push(layerInfo);
-        //   } else if (layer.esriLayer.url === 'http://gis.wri.org/server/rest/services/LandMark/indicators_legal_security/MapServer' && sublayer.id >= 11) {
-        //     communityLayers.push(layerInfo);
-        //   } else {
-        //     dynamicLayers.push(layerInfo);
-        //   }
-        // });
+
+        layerPanel.forEach(group => {
+          if (group.isCustomGroup) {
+            group.layerIds.forEach(id => {
+              if (layer.id === id) {
+                group.layers = dynamicLayers;
+                if (group.subLayersToInclude) {
+                  group.layers = group.layers.filter(l => group.subLayersToInclude.indexOf(l.subIndex) > -1);
+                }
+              }
+            });
+          }
+        });
         // Push the dynamic layers into the array in their current order
         for (let i = dynamicLayers.length - 1; i >= 0; i--) {
           layers.unshift(dynamicLayers[i]);
@@ -478,6 +398,15 @@ export default class Map extends Component {
             itemId: layer.itemId
           };
           layers.unshift(layerInfo);
+          layerPanel.forEach(group => {
+            if (group.isCustomGroup) {
+              group.layerIds.forEach(id => {
+                if (layer.id === id) {
+                  group.layers.push(layerInfo);
+                }
+              });
+            }
+          });
         });
       } else {
         const layerInfo = {
@@ -488,34 +417,19 @@ export default class Map extends Component {
           esriLayer: layer.layerObject,
           itemId: layer.itemId
         };
-
-        // if (layer.id === 'mining_cached_8843'
-        //   || layer.id === 'land_use_1483'
-        //   || layer.id === 'land_use_5422'
-        //   || layer.id === 'infrastructure_9418') {
-        //     console.log(layer);
-        //   }
-
-        // if (layer.id === 'comm_comm_CustomaryTenure_6877'
-        //   || layer.id === 'comm_comm_NotDocumented_9336'
-        //   || layer.id === 'comm_comm_Documented_4717'
-        //   || layer.id === 'comm_comm_FormalLandClaim_5585'
-        //   || layer.id === 'comm_ind_CustomaryTenure_8127'
-        //   || layer.id === 'comm_ind_FormalLandClaim_2392'
-        //   || layer.id === 'comm_ind_NotDocumented_2683'
-        //   || layer.id === 'comm_ind_Documented_8219') {
-        //     groupLandMaps.push(layerInfo);
-        //   }
         layers.unshift(layerInfo);
+        layerPanel.forEach(group => {
+          if (group.isCustomGroup) {
+            group.layerIds.forEach(id => {
+              if (layer.id === id) {
+                group.layers.push(layerInfo);
+              }
+            });
+          }
+        });
       }
     });
 
-    //- Set up the group labels and group layers
-    // settings.layerPanel.GROUP_INDIGENOUS_INDICATORS.layers = groupIndigenousIndicators;
-    // settings.layerPanel.GROUP_COMMUNITY_INDICATORS.layers = groupCommunityIndicators;
-    // settings.layerPanel.GROUP_INDIGENOUS_LANDS_HELD.layers = groupIndigenousLandsHeld;
-    // settings.layerPanel.GROUP_PRESSURES.layers = groupPressures;
-    // settings.layerPanel.GROUP_LAND_MAPS.layers = groupLandMaps;
     // settings.layerPanel.GROUP_WEBMAP.label[language] = settings.labels[language] ? settings.labels[language].webmapMenuName : '';
 
     // if (saveLayersInOtherLang) {
