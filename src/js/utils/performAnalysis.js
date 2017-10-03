@@ -37,8 +37,8 @@ export default function performAnalysis (options) {
     modisTo
   } = options;
   const restorationUrl = settings && settings.restorationImageServer;
-  const landCoverConfig = settings && settings.layerPanel && settings.layerPanel.GROUP_LC ?
-    utils.getObject(settings.layerPanel.GROUP_LC.layers, 'id', layerKeys.LAND_COVER) : {};
+  const landCoverConfig = settings && settings.layerPanel && settings.layerPanel.filter(g => g.groupId === 'GROUP_LC')[0] ?
+    utils.getObject(settings.layerPanel.filter(g => g.groupId === 'GROUP_LC')[0].layers, 'id', layerKeys.LAND_COVER) : {};
   const config = analysisConfig[type];
   const promise = new Deferred();
 

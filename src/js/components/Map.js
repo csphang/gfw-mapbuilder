@@ -399,6 +399,7 @@ export default class Map extends Component {
           };
           layers.unshift(layerInfo);
           layerPanel.forEach(group => {
+            group.layers = [];
             if (group.isCustomGroup) {
               group.layerIds.forEach(id => {
                 if (layer.id === id) {
@@ -419,6 +420,7 @@ export default class Map extends Component {
         };
         layers.unshift(layerInfo);
         layerPanel.forEach(group => {
+          group.layers = [];
           if (group.isCustomGroup) {
             group.layerIds.forEach(id => {
               if (layer.id === id) {

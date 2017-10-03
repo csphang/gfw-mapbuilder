@@ -68,7 +68,6 @@ export default class LayerPanel extends Component {
         group.layers.sort((a, b) => a.subIndex - b.subIndex);
         layers = this.createRadioGroup(group.layers);
       } else if (group.isNested === true) {
-        console.log(group);
         layers = <NestedGroup groups={group.nestedGroups} layers={group.layers} activeLayers={this.props.activeLayers} />;
       } else {
         layers = group.key === LayerKeys.GROUP_BASEMAP ?

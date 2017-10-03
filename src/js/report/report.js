@@ -533,8 +533,10 @@ const makeRestorationAnalysisCharts = function makeRestorationAnalysisCharts (re
 };
 
 const runAnalysis = function runAnalysis (params, feature) {
-  const lcLayers = resources.layerPanel.GROUP_LC ? resources.layerPanel.GROUP_LC.layers : [];
-  const lcdLayers = resources.layerPanel.GROUP_LCD ? resources.layerPanel.GROUP_LCD.layers : [];
+  const lcGroup = resources.layerPanel.filter(g => g.groupId === 'GROUP_LC')[0];
+  const lcLayers = lcGroup ? lcGroup.layers : [];
+  const lcdGroup = resources.layerPanel.filter(g => g.groupId === 'GROUP_LCD')[0];
+  const lcdLayers = lcdGroup ? lcdGroup.layers : [];
   const layerConf = appUtils.getObject(lcLayers, 'id', layerKeys.LAND_COVER);
   const lossLabels = analysisConfig[analysisKeys.TC_LOSS].labels;
   const { tcd, lang, settings, activeSlopeClass, tcLossFrom, tcLossTo } = params;

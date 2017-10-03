@@ -47,7 +47,8 @@ export default class AnalysisTypeSelect extends Component {
   prepareOptions = (language) => {
     const {settings} = this.context;
     //- Get references to all the layers
-    const lcdGroupLayers = settings.layerPanel.GROUP_LCD ? settings.layerPanel.GROUP_LCD.layers : [];
+    const lcdGroup = settings.layerPanel.filter(g => g.groupId === 'GROUP_LCD');
+    const lcdGroupLayers = lcdGroup ? lcdGroup.layers : [];
     let options = text[language].ANALYSIS_SELECT_TYPE_OPTIONS;
     //- Remove options not included based on settings
     //- Also, remove Tree Cover Options if those layers are not in the settings.layerPanel.GROUP_LCD config

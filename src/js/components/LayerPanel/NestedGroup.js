@@ -12,37 +12,6 @@ export default class NestedGroup extends Component {
     map: PropTypes.object.isRequired
   };
 
-  constructor(props) {
-    super(props);
-
-    this.indigenousAcknowledged = [];
-    this.indigenousNotAcknowledged = [];
-    this.communityAcknowledged = [];
-    this.communityNotAcknowledged = [];
-
-    props.layers.forEach(layer => {
-      if (layer.indigenousOrCommunity === 'indigenous') {
-        if (layer.acknowledgedByGovt === true) {
-          
-          this.indigenousAcknowledged.push(layer);
-        } else {
-          this.indigenousNotAcknowledged.push(layer);
-        }
-      } else {
-        if (layer.acknowledgedByGovt === true) {
-          this.communityAcknowledged.push(layer);
-        } else {
-          this.communityNotAcknowledged.push(layer);
-        }
-      }
-    });
-
-    this.indigenousAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
-    this.indigenousNotAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
-    this.communityAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
-    this.communityNotAcknowledged.sort((a, b) => a.panelOrder - b.panelOrder);
-  }
-
   renderGroups = (groups, layers, activeLayers) => {
     return groups.map((group, idx) => {
 
@@ -60,10 +29,6 @@ export default class NestedGroup extends Component {
 
     const {groups, layers, activeLayers} = this.props;
 
-    const IAChecked = this.indigenousAcknowledged.some(layer => activeLayers.indexOf(layer.id) > -1);
-    const INAChecked = this.indigenousNotAcknowledged.some(layer => activeLayers.indexOf(layer.id) > -1);
-    const CAChecked = this.communityAcknowledged.some(layer => activeLayers.indexOf(layer.id) > -1);
-    const CNAChecked = this.communityNotAcknowledged.some(layer => activeLayers.indexOf(layer.id) > -1);
     return (
       <div>
         {this.renderGroups(groups, layers, activeLayers)}

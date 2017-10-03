@@ -88,7 +88,7 @@ export default class App extends Component {
     if (base && base[base.length - 1] === '/' && base[base.length - 2] === '/') {
       base = base.substring(0, base.length - 1);
     }
-    buildConfig.layerPanel.GROUP_BASEMAP.layers.forEach((basemap) => {
+    buildConfig.layerPanel.filter(g => g.groupId === 'GROUP_BASEMAP')[0].layers.forEach((basemap) => {
       basemap.thumbnailUrl = base + basemap.thumbnailUrl;
     });
 

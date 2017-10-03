@@ -83,7 +83,8 @@ const LayersHelper = {
   updateTreeCoverDefinitions (density, map, layerPanel) {
     if (map.loaded) {
       //- Get the layer config, I am hardcoding en becuase I do not need anything language specific, just its config
-      const lcGroupLayers = layerPanel.GROUP_LC ? layerPanel.GROUP_LC.layers : [];
+      const lcGroup = layerPanel.filter(g => g.groupId === 'GROUP_LC')[0];
+      const lcGroupLayers = lcGroup ? lcGroup.layers : [];
       const layerConfig = utils.getObject(lcGroupLayers, 'id', layerKeys.TREE_COVER);
       const layer = map.getLayer(layerKeys.TREE_COVER);
 

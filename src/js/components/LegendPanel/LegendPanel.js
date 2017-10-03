@@ -180,7 +180,7 @@ export default class LegendPanel extends Component {
     // }
 
     legendComponents = legendComponents.concat(webmapChildComponents);
-    // legendComponents = legendComponents.concat(legendLayers.map(this.createLegend));
+    legendComponents = legendComponents.concat(legendLayers.map(this.createLegend));
 
     return (
       <div className={rootClasses}>

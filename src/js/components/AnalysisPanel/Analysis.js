@@ -170,7 +170,8 @@ export default class Analysis extends Component {
     const {settings} = this.context;
     const layerGroups = settings.layerPanel;
     const lossLabels = analysisConfig[analysisKeys.TC_LOSS].labels;
-    const lcLayers = layerGroups.GROUP_LC ? layerGroups.GROUP_LC.layers : [];
+    const lcGroup = layerGroups.filter(g => g.groupId === 'GROUP_LC')[0];
+    const lcLayers = lcGroup ? lcGroup.layers : [];
     let labels, layerConf, colors;
     switch (type) {
       case analysisKeys.VIIRS_FIRES:

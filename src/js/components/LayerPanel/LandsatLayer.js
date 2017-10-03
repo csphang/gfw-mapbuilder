@@ -52,7 +52,7 @@ export default class LandsatLayer extends Component {
   changeYear (evt) {
     const {map, settings} = this.context;
     const year = this.props.years[evt.target.selectedIndex];
-    const landsatConfig = utils.getObject(settings.layerPanel.GROUP_BASEMAP.layers, 'id', LayerKeys.LANDSAT);
+    const landsatConfig = utils.getObject(settings.layerPanel.filter(g => g.groupId === 'GROUP_BASEMAP')[0].layers, 'id', LayerKeys.LANDSAT);
     this.setState({ yearSelected: year });
     mapActions.changeBasemap(this.props.layerId);
     basemapUtils.changeLandsatYear(map, year, landsatConfig);
