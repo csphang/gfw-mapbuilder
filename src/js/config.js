@@ -23,6 +23,7 @@ const config = {
     'staging.blueraster.io',
     'stg.blueraster.com.s3.amazonaws.com',
     'production-api.globalforestwatch.org',
+    'staging-api.globalforestwatch.org',
     'production-api.globalforestwatch.org/v1/ogr',
     'production-api.globalforestwatch.org/v1/ogr/convert'
   ],
@@ -155,7 +156,8 @@ const config = {
   //- Analysis for individual layers are defined below so we can use common keys
   //- Generic/Modules config is here
   analysis: {
-    apiUrl: 'https://production-api.globalforestwatch.org/v1/geostore',
+    // apiUrl: 'https://production-api.globalforestwatch.org/v1/geostore',
+    apiUrl: 'https://staging-api.globalforestwatch.org/v1/geostore',
     imageService: analysisImageService,
     pixelSize: 100,
     tcd: {
@@ -202,14 +204,16 @@ config.analysis[analysisKeys.GLAD_ALERTS] = {
     '2016': 4,
     '2017': 9
   },
-  analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
+  // analysisUrl: 'https://production-api.globalforestwatch.org/v1/glad-alerts',
+  analysisUrl: 'https://staging-api.globalforestwatch.org/v1/glad-alerts',
   startDate: '2015',
   endDate: new Date().getFullYear()
 };
 
 config.analysis[analysisKeys.TERRA_I_ALERTS] = {
   url: 'https://gis-gfw.wri.org/arcgis/rest/services/image_services/terrai_analysis/ImageServer',
-  analysisUrl: 'https://production-api.globalforestwatch.org/v1/terrai-alerts'
+  // analysisUrl: 'https://production-api.globalforestwatch.org/v1/terrai-alerts'
+  analysisUrl: 'https://staging-api.globalforestwatch.org/v1/terrai-alerts'
 };
 
 config.analysis[analysisKeys.BIO_LOSS] = {

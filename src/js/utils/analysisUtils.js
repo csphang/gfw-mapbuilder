@@ -84,13 +84,16 @@ const formatters = {
       alerts: bin
     };
   },
-  gladAlerts: function (year, counts, startDate = 1) {
+  alerts: function (data) {
     var results = [];
 
-    for (let i = startDate; i < counts.length; i++) {
-      results.push([new Date(year, 0, i).getTime(), counts[i] || 0]);
-    }
+    // for (let i = startDate; i < counts.length; i++) {
+    //   results.push([new Date(year, 0, i).getTime(), counts[i] || 0]);
+    // }
 
+    data.forEach(d => {
+      results.push([new Date(d.alert_date).getTime(), d.count || 0]);
+    })
     return results;
   },
   terraIAlerts: function (counts) {
@@ -313,7 +316,7 @@ export default {
       handleAs: 'json',
       timeout: 30000
     }, { usePost: false }).then(gladResult => {
-      const alerts = this.cleanAlerts(gladResult.data.attributes);
+      const alerts = formatters.alerts(gladResult.data.attributes.value);
       promise.resolve(alerts || []);
     }, err => {
       console.error(err);
@@ -343,7 +346,7 @@ export default {
       handleAs: 'json',
       timeout: 30000
     }, { usePost: false }).then(terraIResult => {
-      const alerts = this.cleanAlerts(terraIResult.data.attributes);
+      const alerts = formatters.alerts(terraIResult.data.attributes.value);
       promise.resolve(alerts || []);
     }, err => {
       console.error(err);
@@ -369,7 +372,7 @@ export default {
       callbackParamName: 'callback',
       content: lossGainData,
       handleAs: 'json',
-      timeout: 30000
+      timeout: 5000
     }, { usePost: false }).then(lossGainResult => {
       deferred.resolve(lossGainResult || []);
     }, err => {
@@ -543,6 +546,7 @@ export default {
   },
 
   cleanAlerts: (results) => {
+    console.log(results);
     let alerts = [];
     const sortedYears = Object.keys(results)
       .filter(key => !isNaN(Number(key)))

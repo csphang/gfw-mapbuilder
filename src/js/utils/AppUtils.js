@@ -116,7 +116,8 @@ const utils = {
     const content = JSON.stringify(geoStore);
 
     const http = new XMLHttpRequest();
-    const url = 'https://production-api.globalforestwatch.org/v1/geostore';
+    // const url = 'https://production-api.globalforestwatch.org/v1/geostore';
+    const url = 'https://staging-api.globalforestwatch.org/v1/geostore';
     const params = content;
     http.open('POST', url, true);
 
